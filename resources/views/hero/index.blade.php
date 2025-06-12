@@ -46,17 +46,35 @@
 <tr>
     <td class="text-center align-middle">{{ $nmr + 1 }}</td>
     <td class="text-center align-middle">
-        <a href="{{ route('hero.create') }}" title="Ubah Data Ini!"><i class="me-2 mdi mdi-autorenew fs-2 text-warning"></i></a>
+        <a href="{{ route('hero.edit', $data) }}" title="Ubah Data Ini!"><i class="me-2 mdi mdi-autorenew fs-2 text-warning"></i></a>
         <a href="#" title="Hapus Data Ini!"><i class="me-2 mdi mdi-delete fs-2 text-success"></i></a>
     </td>
     <td class="align-middle">{{ $data->judul1 }}</td>
     <td class="align-middle">{{ $data->judul2 }}</td>
     <td class="align-middle">{{ $data->judul3 }}</td>
     <td class="align-middle"><img class="img-thumbnail w-25" src="storage/{{ $data->url_img }}" alt="storage/{{ $data->url_img }}"></td>
-    <td class="text-center align-middle"></td>
+    <td class="text-center align-middle">{{ $data->aktif }}</td>
 </tr>
 @endforeach
  </tbody>
 </table>
-               
+<script>
+  const body = document.getElementById('body')
+
+  function tampil_pesan() {
+    const simpan = "{{session('simpan')}}"
+    const ubah = "{{session('ubah')}}"
+
+    if (simpan.trim() !== '') {
+      swal('Good Job!', simpan, 'success')
+    }
+    if (ubah.trim() !== '') {
+      swal('Good Job!', ubah, 'success')
+    }
+  }
+
+  body.onpageshow = function() {
+    tampil_pesan()
+  }
+</script>           
 @endsection

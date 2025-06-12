@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 class HeroController extends Controller
@@ -94,7 +95,10 @@ class HeroController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('hero.edit', [
+            'title' => 'Hero',
+            'data' => Hero::find($id),
+        ]);
     }
 
     /**
@@ -102,9 +106,45 @@ class HeroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        if($request->aktif == "on") {
+            $aktif = 1;
+            DB::table('hero')->where('aktif', 1)->update([
+                'aktif' => '0'
+            ]);
+        } else {
+            $aktif = 0;
+        }
 
+        $data = Hero::find($id);
+        $data->judul1 = $request->judul1;
+        $judul1_lama = DB::table('hero')
+        ->where('id','=', $id)
+        ->value('judul1');
+        $data->judul2 = $request->judul2;
+        $data->judul3 = $request->judul3;
+        $data->aktif = $aktif;
+        $url_img_lama = DB::table('hero')
+        ->where('id','=', $id)
+        ->value('url_img');
+        if ($request->file('url_img') !== null) {
+            // Ambil file baru
+            $file = $request->file('url_img');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $destinationPath = public_path('storage/hero_img');
+            $file->move($destinationPath, $filename);
+            // Simpan path relatif ke database
+            $data['url_img'] = 'hero_img/' . $filename;
+            // Hapus file lama jika ada
+            if ($url_img_lama && file_exists(public_path('storage/' . $url_img_lama))) {
+                unlink(public_path('storage/' . $url_img_lama));
+            }
+        }
+
+        $data->save();
+        return redirect()->route('hero.index')->with('update', 'Data Berhasil Diubah'
+        .  $judul1_lama .
+        ' has been updated ');
+    }
     /**
      * Remove the specified resource from storage.
      */

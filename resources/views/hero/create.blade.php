@@ -26,7 +26,7 @@
          <div class="row">    
             <div class="col-12">
               <div class="card bg-warning">
-                <div class="card-body">   
+                <div class="card-body mx-5">   
                     <h5 class="card-title mb-5">Form input Data Hero</h5>
                 <div class="mb-3 row">
                     <label for="judul1" class="col-sm-2 col-form-label">Judul 1</label>

@@ -61,7 +61,14 @@
               </div>
               <div class="header-action-area">
                 <div class="login-reg">
-                  <a href="#/">log in</a><span>/</span><a href="#/">register</a> <i class="icon icofont-user-alt-3"></i>
+                  @if(session('user_id'))
+                    <span>{{ session('user_name')}}</span>
+                    <span>/</span>
+                    <a href="{{ route('auth.logout') }}">Logout</a>
+                  @else
+                    <a href="{{ route('auth.index') }}">log in</a><span>/</span><a href="{{ route('auth.create') }}">register</a>
+                  @endif
+                  <i class="icon icofont-user-alt-3"></i>
                 </div>
                 <div class="widget-language">
                   <span class="current">Eng <i class="icon icofont-simple-down"></i></span>
